@@ -55,6 +55,17 @@ async function startServer() {
   });
 }
 
+// returns all the lessons from the database as json
+app.get("/lessons", async function (request, response) {
+  var lessons = await db.collection("lessons").find({}).toArray();
+  response.json(lessons);
+});
+
+// any request that didn't match a route ends up here
+app.use(function (request, response) {
+  response.status(404).send("Page not found!");
+});
+
 startServer().catch(function (error) {
   console.log("Could not start server: " + error);
 });
