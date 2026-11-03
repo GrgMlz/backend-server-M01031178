@@ -1,6 +1,9 @@
 // load the variables from the .env file (so the password isn't in the code)
 require("dotenv").config();
 
+
+var path = require("path");
+
 var express = require("express");
 var cors = require("cors");
 var MongoClient = require("mongodb").MongoClient;
@@ -22,6 +25,17 @@ app.use(function (request, response, next) {
 
 var client = new MongoClient(process.env.MONGODB_URI);
 var db;
+
+// folder where the lesson images are stored
+var imagesPath = path.resolve(__dirname, "images");
+
+// sends the image if it exists in the images folder
+app.use("/images", express.static(imagesPath));
+
+// if the image wasn't found above, send an error message
+app.use("/images", function (request, response) {
+  response.status(404).send("Image not found");
+});
 
 // test route
 app.get("/", function (request, response) {
