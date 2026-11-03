@@ -13,6 +13,13 @@ app.use(cors());
 // let the server read JSON sent in the body of requests
 app.use(express.json());
 
+// logger middleware: runs for every request and prints it to the console
+app.use(function (request, response, next) {
+  var time = new Date().toISOString();
+  console.log(time + " | " + request.method + " " + request.url);
+  next();
+});
+
 var client = new MongoClient(process.env.MONGODB_URI);
 var db;
 
