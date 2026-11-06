@@ -63,6 +63,16 @@ app.post("/orders", async function (request, response) {
   response.json({ message: "Order received!", id: result.insertedId });
 });
 
+// changes fields of one lesson, e.g. the space
+app.put("/lessons/:id", async function (request, response) {
+  var id = new ObjectId(request.params.id);
+  var result = await db.collection("lessons").updateOne(
+    { _id: id },
+    { $set: request.body }
+  );
+  response.json({ message: "Lesson updated", modified: result.modifiedCount });
+});
+
 // returns all the lessons from the database as json
 app.get("/lessons", async function (request, response) {
   var lessons = await db.collection("lessons").find({}).toArray();
