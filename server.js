@@ -7,6 +7,7 @@ var path = require("path");
 var express = require("express");
 var cors = require("cors");
 var MongoClient = require("mongodb").MongoClient;
+var ObjectId = require("mongodb").ObjectId;
 
 var app = express();
 
@@ -54,6 +55,13 @@ async function startServer() {
     console.log("Open http://localhost:" + port);
   });
 }
+
+// saves a new order in the orders collection
+app.post("/orders", async function (request, response) {
+  var order = request.body;
+  var result = await db.collection("orders").insertOne(order);
+  response.json({ message: "Order received!", id: result.insertedId });
+});
 
 // returns all the lessons from the database as json
 app.get("/lessons", async function (request, response) {
